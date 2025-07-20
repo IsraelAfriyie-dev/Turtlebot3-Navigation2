@@ -41,7 +41,7 @@ This terminal launch gazebo app.
 ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 ```
 <div align="center">
-    <img src="docs/rover.png" width="75%"/>
+    <img src="docs/gazebo.png" width="75%"/>
 </div>
 
 #### Open terminal 2
