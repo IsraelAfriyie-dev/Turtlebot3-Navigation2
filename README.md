@@ -41,7 +41,7 @@ This terminal launch gazebo app.
 ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 ```
 <div align="center">
-    <img src="docs/gazebo.png" width="75%"/>
+    <img src="gazebo.png" width="30%"/>
 </div>
 
 #### Open terminal 2
@@ -54,6 +54,9 @@ This terminal creates the map with SLAM with RVIZ Software
 ```shell
 ros2 launch turtlebot3_cartographer cartographer.launch.py use_sim_time:=True
 ```
+<div align="center">
+    <img src="RVIZ.png" width="30%"/>
+</div>
 
 ## Save Map
 Open a new terminal to save map to new directory
