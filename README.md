@@ -78,6 +78,9 @@ Start Terminal 2
 ```shell
 ros2 launch turtlebot3_navigation2 navigation2.launch.py use_sim_time:=True map:=map/my_map.yaml
 ```
+<div align="center">
+    <img src="nav2_video.mp4" width="30%"/>
+</div>
 Once the map loads in RViz, provide an approximate starting position for the robot by referencing its location in Gazebo. 
 Use the "2D Pose Estimate" tool in RViz to click and set the robot’s initial pose. 
 Then, use the "Nav2 Goal" tool to define the destination by clicking on the map. The robot will begin navigating to the specified goal.
