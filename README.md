@@ -1,44 +1,76 @@
-# Turtlebot3-Navigation2
-Turtlebot3 for Nav2(Notes)
-The question is how do we make a robot navigate? the package used for the navogation is Nav2, and this saves us time for Robot to navigate
-The Nav2 is the package that allows the robot to navigate form one point to another safely.
-So in order to do this we will create a map with a SLAM. And the next step will be making sure the roboit navigate from point A to B.
+## Turtlebot3-Navigation2
+To enable autonomous navigation, we use the **Nav2 (Navigation 2) package** — a powerful ROS 2-based framework that allows a robot to move safely from one point to another. Nav2 handles essential tasks such as path planning, obstacle avoidance, and localization, significantly reducing the time and effort required to implement navigation from scratch. The process begins by creating a map of the environment using SLAM (Simultaneous Localization and Mapping). Once the map is built, the robot can be instructed to navigate from point A to point B autonomously using the Nav2 stack.
 
-To begin with we will install the packages:
- -sudo apt update
- -sudo apt install ros-humble-navigation2 ros-humble-nav2-bringup ros-humble-turtlebot3*( This installs the nav2 package alongside with turtlebot3 packages) 
+## Table of Contents
 
-Start the trutlebot3 in a simulating environment and make sure it moves
-specify which turlebot3 you need in your environement( Burger, waffle ... etc)
--gedit ~/.bashrc ( this opens the bashrc command and allow you to edit the turtlebot3 line of code) by adding... above the source.
--export TURTLEBOT3_MODEL=waffle
+1. [Installation](#installation)
+    - [System Preparation & Package Installation]
+    - [Cloning and Building the Workspace]
+3. [Start Simulation Environment](#usage)
+   - [Terminal 1: Starts Gazebo]
+   - [Terminal 2: Starts Teleop Keyboard]
+   - [Terminal 3: Starts RVIZ]
+4. [Save Map](#SaveMap)
+5. [Launching Nav2 and Navigating in Simulation](#gazebo-simulation)
 
-Use this to check 
--source .bashrc
--printenv | grep TURTLE ( it should print out:TURTLEBOT3_MODEL=waffle) for you to see the turtlebot3 type you are using.
 
-We will start the gazebo app from the terminal.
--ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+## Installation
+#### System Preparation & Package Installation
+```shell
+sudo apt update
+sudo apt install ros-humble-navigation2 ros-humble-nav2-bringup ros-humble-turtlebot3*
+```
+#### Cloning and Building the Workspace
+```shell
+cd ~/turtlebot3_ws/src
+git clone https://github.com/IsraelAfriyie-dev/Turtlebot3-Navigation2.git
+cd ~/turtlebot3_ws
+rosdep install --from-paths src -r -y
+colcon build
+```
 
-we will start a node that will make the robot move in Gazebo for a new terminal
--ros2 run turtlebot3_teleop teleop_keyboard 
+## Start Simulation Environment 
+Specify which turlebot3 you need in your environement( Burger, waffle ... etc)
+```shell
+gedit ~/.bashrc 
+export TURTLEBOT3_MODEL=waffle
+```
+#### Open terminal 1 
+This terminal launch gazebo app.
+```shell
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+```
+<div align="center">
+    <img src="docs/rover.png" width="75%"/>
+</div>
 
-Create a map with the SLAM
--ros2 launch turtlebot3_cartographer cartographer.launch.py use_sim_time:=True(This code launches the SLAM toolbox for turtlebot3 but it should be done alongisde ;launching of gazebo)
-and this launces RVIZ software.
-the goal is to generat ethe map from RVIZ window and save it
+#### Open terminal 2
+this terminal starts a node for controlling the robot move in Gazebo 
+```shell
+ros2 run turtlebot3_teleop teleop_keyboard
+```
+#### Open terminal 3
+This terminal creates the map with SLAM with RVIZ Software
+```shell
+ros2 launch turtlebot3_cartographer cartographer.launch.py use_sim_time:=True
+```
 
-so terminal 1 start gazebo, terminal 2 start SLAM, and terminal 3 start teleop command to control the robot.
-so as you move the robo, the map start to generate from SLAM
-
-when you doen creating the map (open a new terminal to save it in your directory)
--israel@DESKTOP-61SQN9F:~$ mkdir map 
--ros2 run nav2_map_server map_saver_cli-f map/your_map (this creates the map, if error run the command mutlipe, times )
- (your_map.pgm  your_map.yaml) confirm that this exist in the directory. Now the map is saved.
-
-stop all the runnning terminals
-Now let the robot navigate in your map created
--start your robot( ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py)  
--open a new terminal to start the navogation for the robot (ros2 launch turtlebot3_navigation2 navigation2.launch.py use_sim_time:=True map:=map/your_map.yaml) stop and start again if you dont see the map
-
-when the map launches then you have to give an estimation of where the robot is by referencing gazebo.( use 2D Pose Estimate by clicking to make the position)                
+## Save Map
+Open a new terminal to save map to new directory
+```shell
+mkdir map 
+ros2 run nav2_map_server map_saver_cli-f map/my_map
+ ```
+## Launching Nav2 and Navigating in Simulation
+Close all active terminals to ensure a clean setup. Now you're ready to begin navigation using the map you previously created.
+start Terminal 1
+```shell
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+```
+Start Terminal 2
+```shell
+ros2 launch turtlebot3_navigation2 navigation2.launch.py use_sim_time:=True map:=map/my_map.yaml) 
+```
+Once the map loads in RViz, provide an approximate starting position for the robot by referencing its location in Gazebo. 
+Use the "2D Pose Estimate" tool in RViz to click and set the robot’s initial pose. 
+Then, use the "Nav2 Goal" tool to define the destination by clicking on the map. The robot will begin navigating to the specified goal.
